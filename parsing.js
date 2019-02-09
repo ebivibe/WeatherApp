@@ -30,6 +30,7 @@ function play(note) {
 }
 
 function wait(ms) {
+    document.getElementById("progress").style.width = "0%";
     var start = new Date().getTime();
     var end = start;
     while (end < start + ms) {
