@@ -66,6 +66,57 @@ function wait(ms) {
        }
 }
 
+
+/*
+* Returns [major/minor, bpm, notes]
+* Average min_temp <-10 C returns minor, else major
+* BPM increases with the amount of rain
+* 12 Scales
+*/
+function getParams(data){
+    var scales=["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
+    var scales = scales[random(0, 11)];
+
+    var min_temp_sum = 0;
+    var count_rain=0;
+    for (var i = 0; i < data.length; i++) {
+        min_temp_sum += data[i].main.temp_min;
+        if(data[i].weather.main=="Rain"){
+            count_rain +=1;
+        }
+    }
+    var min_temp_avg = min_temp_sum/data.length;
+    if(min_temp_avg<263.15){
+        //pick minor
+    }
+    else{
+        //pick major
+    }
+    //TO DO: the scale
+    //here
+
+
+    var bpm=0;
+    if(count_rain>data.length/2){
+        bpm = 140;
+    }
+    else{
+        bpm = 100;
+    }
+    
+
+
+
+
+
+
+}
+
+function random(min,max) // min and max included
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
 ///////////////////////////
 //   OPEN SOURCE CODE    //
 ///////////////////////////
