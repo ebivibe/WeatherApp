@@ -1,20 +1,32 @@
 function Generate(lat, lon, form){
-    alert("working");
-    form.coordinates.value="("+lat+", "+lon+")";
-            var request = new XMLHttpRequest();
+             request = new XMLHttpRequest();
             // Open a new connection, using the GET request on the URL endpoint
-            var x='http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon+'&APPID='+keynums;
+            var x='http://api.openweathermap.org/data/2.5/forecast?lat='+lat+'&lon='+lon+'&APPID=0849d2b7e2fadff537a5e0e8d2eff1c8';
+            ;
             request.open('GET', x , true);
             request.onload = function () {
                 
-                var data = JSON.parse(this.response);
+                var data = JSON.parse(this.response).list;
                 
-                form.location.value=data.name;
-
-                form.temp.value=String(parseFloat(data.main.temp)-273.15);
-    
-                form.forecast.value=data.weather[0].description;
+                console.log(data);
+                play("mid_c");
                 
             }
             request.send();
 }
+
+function play(note){
+    document.getElementById(note).play();
+    wait(1000)
+}
+
+function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+      end = new Date().getTime();
+      document.getElementById("progress").style.width = document.getElementById("progress").style.width+100/ms+"%";
+        console.log(document.getElementById("progress").style.width);
+    }
+   document.getElementById("progress").style.width = "100%";
+ }

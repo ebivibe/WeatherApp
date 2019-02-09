@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+        function getData(keynums,lat, lon, form){
+            form.coordinates.value="("+lat+", "+lon+")";
+            var request = new XMLHttpRequest();
+            // Open a new connection, using the GET request on the URL endpoint
+            var x='http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon+'&APPID='+keynums;
+            request.open('GET', x , true);
+            request.onload = function () {
+                
+                var data = JSON.parse(this.response);
+                
+                form.location.value=data.name;
+
+                form.temp.value=String(parseFloat(data.main.temp)-273.15);
+    
+                form.forecast.value=data.weather[0].description;
+                
+            }
+            request.send();
+        }
+        function clearIt(form){
+            form.lat.value="";
+            form.lon.value="";
+            form.coordinates.value="";
+            form.location.value="";
+            form.temp.value="";
+            form.forecast.value="";
+        }
+        </script>
+    </head>
+<body>
+    <form name="Weather" method="post">
+        <p>
+            Enter your key: <input type="text" name="keynums">
+        </p>
+    <form name="Weather" method="post">
+    <p>
+        Enter the latitude: <input type="text" name="lat">
+    </p>
+    <p>
+        Enter the latitude: <input type="text" name="lon">
+    </p>
+    <p>
+        <INPUT TYPE="button" VALUE="Get Data" name="getdata" onClick="getData(this.form.keynums.value, this.form.lat.value, this.form.lon.value, this.form)">
+        <INPUT TYPE="button" VALUE="Clear" name="clear" onClick="clearIt(this.form)">
+    </p>
+    <p>
+        At these coordinates: <input type="text" name="coordinates">
+    </p>
+    <p>
+        The location is: <input type="text" name="location">
+    </p>
+    <p>
+        The temperature is: <input type="text" name="temp">
+    </p>
+    <p>
+        The forecast is: <input type="text" name="forecast">
+    </p>
+    </FORM>
+</body>
+</html>
