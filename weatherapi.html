@@ -2,11 +2,11 @@
 <html>
     <head>
         <script>
-        function getData(lat, lon, form){
+        function getData(keynums,lat, lon, form){
             form.coordinates.value="("+lat+", "+lon+")";
             var request = new XMLHttpRequest();
             // Open a new connection, using the GET request on the URL endpoint
-            var x='http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon+'&APPID=0849d2b7e2fadff537a5e0e8d2eff1c8';
+            var x='http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon+'&APPID='+keynums;
             request.open('GET', x , true);
             request.onload = function () {
                 
@@ -32,16 +32,19 @@
         </script>
     </head>
 <body>
-   
+    <form name="Weather" method="post">
+        <p>
+            Enter your key: <input type="text" name="keynums">
+        </p>
     <form name="Weather" method="post">
     <p>
         Enter the latitude: <input type="text" name="lat">
     </p>
     <p>
-        Enter the longitude: <input type="text" name="lon">
+        Enter the latitude: <input type="text" name="lon">
     </p>
     <p>
-        <INPUT TYPE="button" VALUE="Get Data" name="getdata" onClick="getData(this.form.lat.value, this.form.lon.value, this.form)">
+        <INPUT TYPE="button" VALUE="Get Data" name="getdata" onClick="getData(this.form.keynums.value, this.form.lat.value, this.form.lon.value, this.form)">
         <INPUT TYPE="button" VALUE="Clear" name="clear" onClick="clearIt(this.form)">
     </p>
     <p>
