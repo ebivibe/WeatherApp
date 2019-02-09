@@ -28,7 +28,7 @@
         <input type="text" name="lon" class="form-control" placeholder="Longitude" aria-label="Latitude"
             aria-describedby="basic-addon2">
 
-        <button type="button" class="btn btn-primary" onclick="Generate()" >Generate Music</button>
+        <button type="button" class="btn btn-primary" onclick="Generate(this.form.lat.value, this.form.lon.value, this.form)" >Generate Music</button>
     </form>
 </body>
 
