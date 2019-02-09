@@ -8,8 +8,7 @@ function Generate(lat, lon, form){
                 
                 var data = JSON.parse(this.response).list;
                 
-                console.log(data);
-                play("mid_c");
+                
                 
             }
             request.send();
