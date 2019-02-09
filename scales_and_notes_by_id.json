@@ -1,5 +1,6 @@
 {
     "A": [
+        "PAUSE",
         "mid_a",
         "mid_b",
         "mid_c_sharp",
@@ -13,9 +14,11 @@
         "high_d_sharp",
         "high_e",
         "high_f",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ],
     "A#": [
+        "PAUSE",
         "mid_a",
         "mid_a_sharp",
         "mid_b_sharp",
@@ -29,9 +32,11 @@
         "high_d",
         "high_e",
         "high_f",
-        "high_f_sharp"
+        "high_f_sharp",
+        "PAUSE"
     ],
     "B": [
+        "PAUSE",
         "mid_a_sharp",
         "mid_b",
         "mid_c_sharp",
@@ -45,9 +50,11 @@
         "high_d_sharp",
         "high_e",
         "high_f_sharp",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ],
     "C": [
+        "PAUSE",
         "mid_a",
         "mid_b",
         "mid_c",
@@ -61,9 +68,11 @@
         "high_d",
         "high_e",
         "high_f",
-        "high_g"
+        "high_g",
+        "PAUSE"
     ],
     "C#": [
+        "PAUSE",
         "mid_a_sharp",
         "mid_c",
         "mid_c_sharp",
@@ -77,9 +86,11 @@
         "high_d_sharp",
         "high_f",
         "high_f_sharp",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ],
     "D": [
+        "PAUSE",
         "mid_a",
         "mid_b",
         "mid_c_sharp",
@@ -93,9 +104,11 @@
         "high_d",
         "high_e",
         "high_f_sharp",
-        "high_g"
+        "high_g",
+        "PAUSE"
     ],
     "D#": [
+        "PAUSE",
         "mid_a_sharp",
         "mid_b_sharp",
         "mid_d",
@@ -109,9 +122,11 @@
         "high_d_sharp",
         "high_f",
         "high_g",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ],
     "E": [
+        "PAUSE",
         "mid_a",
         "mid_b",
         "mid_c",
@@ -125,9 +140,11 @@
         "high_d_sharp",
         "high_e",
         "high_f_sharp",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ],
     "F": [
+        "PAUSE",
         "mid_a",
         "mid_b",
         "mid_c",
@@ -141,9 +158,11 @@
         "high_c_sharp",
         "high_e",
         "high_f",
-        "high_g"
+        "high_g",
+        "PAUSE"
     ],
     "F#": [
+        "PAUSE",
         "mid_a_sharp",
         "mid_c",
         "mid_c_sharp",
@@ -157,9 +176,11 @@
         "high_d",
         "high_f",
         "high_f_sharp",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ],
     "G": [
+        "PAUSE",
         "mid_a",
         "mid_b",
         "mid_c_sharp",
@@ -173,9 +194,11 @@
         "high_d",
         "high_d_sharp",
         "high_f_sharp",
-        "high_g"
+        "high_g",
+        "PAUSE"
     ],
     "G#": [
+        "PAUSE",
         "mid_a_sharp",
         "mid_c",
         "mid_d",
@@ -189,6 +212,7 @@
         "high_d_sharp",
         "high_e",
         "high_g",
-        "high_g_sharp"
+        "high_g_sharp",
+        "PAUSE"
     ]
 }
