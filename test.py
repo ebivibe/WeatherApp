@@ -1,6 +1,7 @@
 import requests
 import json
 import hashlib
+import pysynth
 
 
 def request_data(url):
@@ -43,16 +44,16 @@ beat_enc = {
 }
 
 
-notes = read_from_file("major_scales.json")['D#']
-notes.insert(0, "PAUSE")
-notes.append("PAUSE")
+notes = read_from_file("major_scales.json")['D#'][:-1] + ['r']
+
 
 if __name__ == "__main__":
-    files = read_from_file("data_to_parse.json")
+    files = read_from_file("sample_data.json")
 
     for data in range(len(files['list'][:1])):
         data = json.dumps(data).encode('utf-8')
         data = make_hash(data)[:-2]
+        song = []
 
         for i in range(0, len(data), 3):
             lengths = int(data[i], 16)
@@ -60,6 +61,9 @@ if __name__ == "__main__":
             second_note = notes[int(data[i+2], 16)]
             length_1 = (lengths & 0b1100) >> 2
             length_2 = (lengths & 0b11)
-            print ("%s%s %s%s " % (length_1, first_note, length_2, second_note), end="")
+            song.append((first_note.lower(), length_1))
+            song.append((second_note.lower(), length_2))
+        
+        pysynth.make_wav(song, fn="test.wav", bpm=120)
 
     print()

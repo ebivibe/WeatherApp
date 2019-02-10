@@ -1,4 +1,5 @@
 var piano = Synth.createInstrument('piano');
+var __audioSynth = new AudioSynth();
 
 function Generate(loc, form) {
     document.getElementById("progress").style.width = "0%";
@@ -24,26 +25,23 @@ function Generate(loc, form) {
                 dur = 0
                 if (music[i].substring(0, 1) == "0") {
                     eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
-                    dur = 3000/bpm*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Eighth note  </li>";
+                    dur = 30/bpm*1000;
                 }
                 else if (music[i].substring(0, 1) == "1") {
                     quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
-                    dur = 6000/bpm*1000;
+                    dur = 60/bpm*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Quarter note  </li>";
-                
                 }
                 else if (music[i].substring(0, 1) == "0") {
                     half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
-                    dur = 12000/bpm*1000;
+                    dur = 120/bpm*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Half note  </li>";
-                
                 }
                 else {
                     whole(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
-                    dur = 24000/bpm*1000;
+                    dur = 240/bpm*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Whole note  </li>";
-                
                 }
                 lastdur = dur;
 
@@ -81,7 +79,7 @@ function parseHash(data, notes) {
 function generateMusic(data, notes) {
 
     var music = []
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 3; i++) {
         music = music.concat(parseHash(hash(data), notes));
     }
     return music;
@@ -109,7 +107,7 @@ var fnPlayNote = function(note, octave, dur) {
 
 function playNote(note, octave, bpm, time, timeout) {
     if (note != "PAUS") {
-        setTimeout(piano.play(note, octave, time / bpm), timeout);
+        setTimeout(piano.play(note, octave, bpm/time), timeout);
     }
 }
 
@@ -418,7 +416,7 @@ var minors = {
         "G#5",
         "PAUSE"
     ]
-}
+};
 
 var majors = {
     "C": [
@@ -637,6 +635,6 @@ var majors = {
         "B5",
         "PAUSE"
     ]
-}
+};
 
 
