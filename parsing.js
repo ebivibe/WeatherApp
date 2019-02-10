@@ -6,7 +6,6 @@ function Generate(loc, form) {
     var req = 'https://us1.locationiq.com/v1/search.php?key=2be3ee39b1a582&q='+ loc + '&format=json';
     request.open('GET', req, true);
     request.onload = function () {
-
         var data = JSON.parse(this.response);
         lon = data[0].lon;
         lat = data[0].lat;
