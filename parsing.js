@@ -43,6 +43,21 @@ function Generate(loc, form) {
 
 }
 
+// Accepts a hex digest of a sha512 hash and parses that into music information
+function parseHash(data, scale) {
+    var musicData = [];
+    for (var i = 0; i < data.length-2; i+=3) {
+        var lengths = parseInt(data.charAt(i), 16);
+        var first_note = parseInt(data.charAt(i+1), 16);
+        var second_note = parseInt(data.charAt(i+2), 16);
+        var first_length = (lengths & 12) >> 2; // 12 = 1100
+        var second_length = lengths & 3; // 3 = 0011
+        musicData.push(first_length + scale[first_note]);
+        musicData.push(second_length + scale[second_note]);
+    }
+    return musicData;
+}
+
 function hash(msg, form){
     console.log(SHA512(msg));
 }
