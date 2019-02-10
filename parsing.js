@@ -125,10 +125,10 @@ function getParams(data){
 }
 
 /*
-* params = [name of file, scale in format A or A#]
+* params = [name_of_file, scale]
 */
-function generateMusic(params){
-    var notes = JSON.parse(params[0].params[1]);
+function generateMusic(name_of_file, scale){
+    var notes = JSON.parse(name_of_file).params[1];
 
     // enter Natalia's code here
 
