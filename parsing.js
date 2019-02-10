@@ -1,6 +1,5 @@
 
-var __audioSynth = new AudioSynth();
-__audioSynth.setVolume(0.5);
+
 function Generate(loc, form) {
     document.getElementById("progress").style.width = "0%";
     request = new XMLHttpRequest();
@@ -18,20 +17,40 @@ function Generate(loc, form) {
             var data2 = JSON.parse(this.response).list;
             var params = getParams(data2);
             var music = generateMusic(data2, params[0]);
+            console.log(music);
             var bpm = params[1];
+            var lastdur = 0;
             for (var i = 0; i < music.length; i++) {
+                dur = 0;
                 if (music[i].substring(0, 1) == "0") {
-                    eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    //eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    dur=240000/bpm;
                 }
                 else if (music[i].substring(0, 1) == "1") {
-                    quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    //quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    dur = 120000/bpm;
                 }
                 else if (music[i].substring(0, 1) == "0") {
-                    half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    //half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    dur = 60000/bpm;
                 }
                 else {
-                    whole(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    //whole(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
+                    dur = 30000/bpm;
                 }
+                if( music[i].substring(1, music[i].length - 1)!="PAUS"){
+                    var y = new Audio(Synth.generate("piano", music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), dur));
+                    if(i==0){
+                        setTimeout(function(){y.play()}, 10);
+                    }
+                    else{
+                        setTimeout(function(){y.play()}, lastdur);
+                    }
+                    lastdur =lastdur + dur;
+                }
+                
+                
+                
             }
 
             document.getElementById("progress").style.width = "100%";
@@ -74,14 +93,10 @@ function generateMusic(data, notes) {
 
 
 function hash(msg, form) {
-    
-    var audio = fnPlayNote("C", 4, 2);
-    var audio2 = fnPlayNote("D", 4, 2);
-    audio2.pause();
-    audio.addEventListener("ended", function () {
-    audio2.play();
-    });
-
+    var x = new Audio(Synth.generate("piano", "C", 4, 120 / 100));
+    x.play();
+    var y = new Audio(Synth.generate("piano", "D", 4, 120 / 100));
+    setTimeout(function(){y.play()}, 1000);
 
     return SHA512(msg);
 }
