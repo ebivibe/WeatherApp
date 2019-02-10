@@ -58,8 +58,26 @@ function parseHash(data, scale) {
     return musicData;
 }
 
+/*
+* 
+*/
+function generateMusic(data, name_of_file, scale){
+    var notes = JSON.parse(name_of_file, function (key, value) {
+        if (key == scale) {
+          return value;
+        } 
+      });
+    var music = []
+    for (var i = 0; i<data.length; i++){
+        music.concat(parseHash(hash(data), notes));
+    }
+    return music;
+
+}
+
+
 function hash(msg, form){
-    console.log(SHA512(msg));
+    return SHA512(msg);
 }
 
 function whole(note, bpm) {
@@ -139,15 +157,6 @@ function getParams(data){
 
 }
 
-/*
-* params = [name_of_file, scale]
-*/
-function generateMusic(name_of_file, scale){
-    var notes = JSON.parse(name_of_file).params[1];
-
-    // enter Natalia's code here
-
-}
 
 function random(min,max) // min and max included
 {
