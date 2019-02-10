@@ -26,16 +26,16 @@ function Generate(loc, form) {
                 if (music[i].substring(0, 1) == "0") {
                     eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Eighth note  </li>";
-                    dur = 30/bpm*1000;
+                    dur = 30*(1/bpm)*1000;
                 }
                 else if (music[i].substring(0, 1) == "1") {
                     quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
-                    dur = 60/bpm*1000;
+                    dur = 60*(1/bpm)*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Quarter note  </li>";
                 }
                 else if (music[i].substring(0, 1) == "0") {
                     half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
-                    dur = 120/bpm*1000;
+                    dur = 120*(1/bpm)*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Half note  </li>";
                 }
                 else {
@@ -43,7 +43,7 @@ function Generate(loc, form) {
                     dur = 240/bpm*1000;
                     document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Whole note  </li>";
                 }
-                lastdur = dur;
+                lastdur += dur;
 
                 
             }
@@ -79,7 +79,7 @@ function parseHash(data, notes) {
 function generateMusic(data, notes) {
 
     var music = []
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 1; i++) {
         music = music.concat(parseHash(hash(data), notes));
     }
     return music;
@@ -91,23 +91,11 @@ function hash(msg, form) {
     return SHA512(msg);
 }
 
-var fnPlayNote = function(note, octave, dur) {
-
-    src = __audioSynth.generate("piano", note, octave, dur);
-    container = new Audio(src);
-    container.addEventListener('ended', function() { container = null; });
-    container.addEventListener('loadeddata', function(e) { e.target.play(); });
-    container.autoplay = false;
-    container.setAttribute('type', 'audio/wav');
-    /*document.body.appendChild(container);*/
-    container.load();
-    return container;
-
-};
-
 function playNote(note, octave, bpm, time, timeout) {
     if (note != "PAUS") {
-        setTimeout(piano.play(note, octave, bpm/time), timeout);
+        setTimeout(piano.play(note, octave, time/bpm), timeout);
+    } else {
+        setTimeout(function() {}, timeout)
     }
 }
 
