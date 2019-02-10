@@ -15,8 +15,23 @@ function Generate(loc, form) {
         request2.onload = function () {
             var data2 = JSON.parse(this.response).list;
             alert(data2[0].weather[0].description);
-            //TO DO: add actual parsing here, add progress bar updates
-            
+            var params = getParams(data2);
+            var music = generateMusic([params[2], params[0]]);
+            var bpm = params[1];
+            for (var i = 0; i < music.length; i++) {
+                if(music[i].substring(0, 1)=="0"){
+                    eighth(music[i].substring(1), bpm);
+                }
+                else if(music[i].substring(0, 1)=="1"){
+                    quarter(music[i].substring(1), bpm);
+                } 
+                else if(music[i].substring(0, 1)=="0"){
+                    half(music[i].substring(1), bpm);
+                }
+                else{
+                    whole(music[i].substring(1), bpm);
+                }
+            }
             
             document.getElementById("progress").style.width = "100%";
         }
@@ -68,14 +83,14 @@ function wait(ms) {
 
 
 /*
-* Returns [major/minor, bpm, notes]
+* Returns [scale, bpm, file_name]
 * Average min_temp <-10 C returns minor, else major
 * BPM increases with the amount of rain
 * 12 Scales
 */
 function getParams(data){
     var scales=["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
-    var scales = scales[random(0, 11)];
+    var scale = scales[random(0, 11)];
 
     var min_temp_sum = 0;
     var count_rain=0;
@@ -86,15 +101,15 @@ function getParams(data){
         }
     }
     var min_temp_avg = min_temp_sum/data.length;
+
+    var filename = "";
     if(min_temp_avg<263.15){
-        //pick minor
+        filename = "minor_scales_by_id";
     }
     else{
-        //pick major
+        filename = "major_scales_by_id";
     }
-    //TO DO: the scale
-    //here
-
+    
 
     var bpm=0;
     if(count_rain>data.length/2){
@@ -103,12 +118,19 @@ function getParams(data){
     else{
         bpm = 100;
     }
+
+    return[scale, bpm, filename];
     
 
+}
 
+/*
+* params = [name of file, scale in format A or A#]
+*/
+function generateMusic(params){
+    var notes = JSON.parse(params[0].params[1]);
 
-
-
+    // enter Natalia's code here
 
 }
 
