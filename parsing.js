@@ -19,7 +19,7 @@ function Generate(loc, form) {
             var music = generateMusic(data2, params[0]);
             var bpm = params[1];
             var lastdur = 0;
-            document.getElementById("music").innerHTML="";
+            document.getElementById("notes").innerHTML="<ul class=\"list-group\" id=\"music\"></ul>";
             for (var i = 0; i < music.length; i++) {
                 dur = 0
                 if (music[i].substring(0, 1) == "0") {
