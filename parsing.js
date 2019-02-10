@@ -112,18 +112,18 @@ function playNote(note, octave, bpm, time, timeout) {
 }
 
 function whole(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 240*4, timeout);
+    playNote(note, octave, bpm, 240, timeout);
 }
 
 function half(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 120*4, timeout);
+    playNote(note, octave, bpm, 120, timeout);
 }
 
 function quarter(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 60*4, timeout);
+    playNote(note, octave, bpm, 60, timeout);
 }
 function eighth(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 30*4, timeout);
+    playNote(note, octave, bpm, 30, timeout);
 }
 
 function wait(ms) {
