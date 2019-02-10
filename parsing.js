@@ -160,7 +160,7 @@ function random(min,max) // min and max included
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-
+//thanks to https://stackoverflow.com/questions/19706046/how-to-read-an-external-local-json-file-in-javascript/45035939
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
     rawFile.overrideMimeType("application/json");
