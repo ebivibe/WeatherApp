@@ -1,4 +1,4 @@
-
+var piano = Synth.createInstrument('piano');
 
 function Generate(loc, form) {
     document.getElementById("progress").style.width = "0%";
@@ -21,36 +21,24 @@ function Generate(loc, form) {
             var bpm = params[1];
             var lastdur = 0;
             for (var i = 0; i < music.length; i++) {
-                dur = 0;
+                dur = 0
                 if (music[i].substring(0, 1) == "0") {
-                    //eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
-                    dur=240000/bpm;
+                    eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
+                    dur = 3000/bpm*1000;
                 }
                 else if (music[i].substring(0, 1) == "1") {
-                    //quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
-                    dur = 120000/bpm;
+                    quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
+                    dur = 6000/bpm*1000;
                 }
                 else if (music[i].substring(0, 1) == "0") {
-                    //half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
-                    dur = 60000/bpm;
+                    half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
+                    dur = 12000/bpm*1000;
                 }
                 else {
-                    //whole(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm);
-                    dur = 30000/bpm;
+                    whole(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
+                    dur = 24000/bpm*1000;
                 }
-                if( music[i].substring(1, music[i].length - 1)!="PAUS"){
-                    var y = new Audio(Synth.generate("piano", music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), dur));
-                    if(i==0){
-                        setTimeout(function(){y.play()}, 10);
-                    }
-                    else{
-                        setTimeout(function(){y.play()}, lastdur);
-                    }
-                    lastdur =lastdur + dur;
-                }
-                
-                
-                
+                lastdur = dur;
             }
 
             document.getElementById("progress").style.width = "100%";
@@ -84,7 +72,7 @@ function parseHash(data, notes) {
 function generateMusic(data, notes) {
 
     var music = []
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < 1; i++) {
         music = music.concat(parseHash(hash(data), notes));
     }
     return music;
@@ -93,11 +81,6 @@ function generateMusic(data, notes) {
 
 
 function hash(msg, form) {
-    var x = new Audio(Synth.generate("piano", "C", 4, 120 / 100));
-    x.play();
-    var y = new Audio(Synth.generate("piano", "D", 4, 120 / 100));
-    setTimeout(function(){y.play()}, 1000);
-
     return SHA512(msg);
 }
 
@@ -115,31 +98,25 @@ var fnPlayNote = function(note, octave, dur) {
 
 };
 
-function whole(note, octave, bpm) {
+function playNote(note, octave, bpm, time, timeout) {
     if (note != "PAUS") {
-        piano.play(note, octave, 240 / bpm);
+        setTimeout(piano.play(note, octave, time / bpm), timeout);
     }
-    wait(240000/bpm);
 }
 
-function half(note, octave, bpm) {
-    if (note != "PAUS") {
-        piano.play(note, octave, 120 / bpm);
-    }
-    wait(240000/bpm);
+function whole(note, octave, bpm, timeout) {
+    playNote(note, octave, bpm, 240, timeout);
 }
-function quarter(note, octave, bpm) {
-    if (note != "PAUS") {
-        piano.play(note, octave, 60 / bpm);
-    }
-    wait(240000/bpm);
-}
-function eighth(note, octave, bpm) {
-    if (note != "PAUS") {
-        piano.play(note, octave, 30 / bpm);
-    }
-    wait(240000/bpm);
 
+function half(note, octave, bpm, timeout) {
+    playNote(note, octave, bpm, 120, timeout);
+}
+
+function quarter(note, octave, bpm, timeout) {
+    playNote(note, octave, bpm, 60, timeout);
+}
+function eighth(note, octave, bpm, timeout) {
+    playNote(note, octave, bpm, 30, timeout);
 }
 
 function wait(ms) {
