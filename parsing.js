@@ -1,3 +1,5 @@
+var piano = Synth.createInstrument('piano');
+
 function Generate(loc, form) {
     document.getElementById("progress").style.width = "0%";
     request = new XMLHttpRequest();
@@ -14,9 +16,8 @@ function Generate(loc, form) {
         request2.open('GET', x, true);
         request2.onload = function () {
             var data2 = JSON.parse(this.response).list;
-            alert(data2[0].weather[0].description);
             var params = getParams(data2);
-            var music = generateMusic([params[2], params[0]]);
+            var music = generateMusic(data2, params[0]);
             var bpm = params[1];
             for (var i = 0; i < music.length; i++) {
                 if(music[i].substring(0, 1)=="0"){
@@ -44,7 +45,7 @@ function Generate(loc, form) {
 }
 
 // Accepts a hex digest of a sha512 hash and parses that into music information
-function parseHash(data, scale) {
+function parseHash(data, notes) {
     var musicData = [];
     for (var i = 0; i < data.length-2; i+=3) {
         var lengths = parseInt(data.charAt(i), 16);
@@ -52,8 +53,8 @@ function parseHash(data, scale) {
         var second_note = parseInt(data.charAt(i+2), 16);
         var first_length = (lengths & 12) >> 2; // 12 = 1100
         var second_length = lengths & 3; // 3 = 0011
-        musicData.push(first_length + scale[first_note]);
-        musicData.push(second_length + scale[second_note]);
+        musicData.push(first_length + notes[first_note]);
+        musicData.push(second_length + notes[second_note]);
     }
     return musicData;
 }
@@ -61,15 +62,11 @@ function parseHash(data, scale) {
 /*
 * 
 */
-function generateMusic(data, name_of_file, scale){
-    var notes = JSON.parse(name_of_file, function (key, value) {
-        if (key == scale) {
-          return value;
-        } 
-      });
+function generateMusic(data, notes){
+    
     var music = []
     for (var i = 0; i<data.length; i++){
-        music.concat(parseHash(hash(data), notes));
+        music = music.concat(parseHash(hash(data), notes));
     }
     return music;
 
@@ -80,30 +77,26 @@ function hash(msg, form){
     return SHA512(msg);
 }
 
-function whole(note, bpm) {
-    if(note!="pause"){
-        document.getElementById(note).play();
+function whole(note, octave, bpm) {
+    if(note!="PAUSE"){
+        piano.play('C', octave, 240/bpm);
     }    
-    wait(240000/bpm)
 }
 
-function half(note, bpm){
-    if(note!="pause"){
-        document.getElementById(note).play();
+function half(note,octave, bpm){
+    if(note!="PAUSE"){
+        piano.play('C', octave, 120/bpm);
     }
-    wait(120000/bpm)
 }
 function quarter(note, bpm){
-    if(note!="pause"){
-        document.getElementById(note).play();
+    if(note!="PAUSE"){
+        piano.play('C', octave, 60/bpm);
     }
-    wait(60000/bpm)
 }
-function eighth(note, bmp){
-    if(note!="pause"){
-        document.getElementById(note).play();
+function eighth(note, bpm){
+    if(note!="PAUSE"){
+        piano.play('C', octave, 30/bpm);
     }
-    wait(30000/bpm)
 }
 
 function wait(ms) {
@@ -135,13 +128,16 @@ function getParams(data){
     }
     var min_temp_avg = min_temp_sum/data.length;
 
-    var filename = "";
+    var scales = "";
     if(min_temp_avg<263.15){
-        filename = "minor_scales_by_id";
+        scales = minors;
     }
     else{
-        filename = "major_scales_by_id";
+        scales = majors;
     }
+
+    var notes = scales[scale];
+    
     
 
     var bpm=0;
@@ -152,7 +148,7 @@ function getParams(data){
         bpm = 100;
     }
 
-    return[scale, bpm, filename];
+    return[notes, bpm];
     
 
 }
@@ -437,6 +433,458 @@ function SHA512(str) {
     }
     return binb2hex(binarray);
    }
+
+function readTextFile(file, callback) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.overrideMimeType("application/json");
+    rawFile.open("GET", file, true);
+    rawFile.onreadystatechange = function() {
+        if (rawFile.readyState === 4 && rawFile.status == "200") {
+            callback(rawFile.responseText);
+        }
+    }
+    rawFile.send(null);
+}
+
+
 ////////////////////////////////
 //   OPEN SOURCE CODE ENDS    //
 ////////////////////////////////
+
+var minors = {
+    "A": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c",
+        "mid_d",
+        "mid_e",
+        "mid_f",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c",
+        "high_d",
+        "high_e",
+        "high_f",
+        "high_g",
+        "PAUSE"
+    ],
+    "A#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_b_sharp",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_f",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_b_sharp",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_f",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "B": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c_sharp",
+        "high_d",
+        "high_e",
+        "high_f_sharp",
+        "high_g",
+        "PAUSE"
+    ],
+    "C": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_d",
+        "mid_d_sharp",
+        "mid_f",
+        "mid_g",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_c",
+        "high_d",
+        "high_d_sharp",
+        "high_f",
+        "high_g",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "C#": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a",
+        "high_b",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_e",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "D": [
+        "PAUSE",
+        "mid_a",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_d",
+        "mid_e",
+        "mid_f",
+        "mid_g",
+        "high_a",
+        "high_a_sharp",
+        "high_c",
+        "high_d",
+        "high_e",
+        "high_f",
+        "high_g",
+        "PAUSE"
+    ],
+    "D#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_e_sharp",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_b",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_e_sharp",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "E": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c",
+        "mid_d",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c",
+        "high_d",
+        "high_e",
+        "high_f_sharp",
+        "high_g",
+        "PAUSE"
+    ],
+    "F": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_f",
+        "mid_g",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_c",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_f",
+        "high_g",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "F#": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a",
+        "high_b",
+        "high_c_sharp",
+        "high_d",
+        "high_e",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "G": [
+        "PAUSE",
+        "mid_a",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_d",
+        "mid_d_sharp",
+        "mid_f",
+        "mid_g",
+        "high_a",
+        "high_a_sharp",
+        "high_c",
+        "high_d",
+        "high_d_sharp",
+        "high_f",
+        "high_g",
+        "PAUSE"
+    ],
+    "G#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_b",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_e",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ]
+}
+
+var majors = {
+    "A": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_e",
+        "mid_f",
+        "mid_g_sharp",
+        "high_a",
+        "high_b",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_e",
+        "high_f",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "A#": [
+        "PAUSE",
+        "mid_a",
+        "mid_a_sharp",
+        "mid_b_sharp",
+        "mid_d",
+        "mid_e",
+        "mid_f",
+        "mid_f_sharp",
+        "high_a",
+        "high_a_sharp",
+        "high_b_sharp",
+        "high_d",
+        "high_e",
+        "high_f",
+        "high_f_sharp",
+        "PAUSE"
+    ],
+    "B": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_b",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_e",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "C": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c",
+        "mid_d",
+        "mid_e",
+        "mid_f",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c",
+        "high_d",
+        "high_e",
+        "high_f",
+        "high_g",
+        "PAUSE"
+    ],
+    "C#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_c_sharp",
+        "mid_d_sharp",
+        "mid_f",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_c",
+        "high_c_sharp",
+        "high_d_sharp",
+        "high_f",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "D": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c_sharp",
+        "high_d",
+        "high_e",
+        "high_f_sharp",
+        "high_g",
+        "PAUSE"
+    ],
+    "D#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_b_sharp",
+        "mid_d",
+        "mid_d_sharp",
+        "mid_f",
+        "mid_g",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_b_sharp",
+        "high_d",
+        "high_d_sharp",
+        "high_f",
+        "high_g",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "E": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c",
+        "mid_d_sharp",
+        "mid_e",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a",
+        "high_b",
+        "high_c",
+        "high_d_sharp",
+        "high_e",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "F": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c",
+        "mid_c_sharp",
+        "mid_e",
+        "mid_f",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c",
+        "high_c_sharp",
+        "high_e",
+        "high_f",
+        "high_g",
+        "PAUSE"
+    ],
+    "F#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_c_sharp",
+        "mid_d",
+        "mid_f",
+        "mid_f_sharp",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_c",
+        "high_c_sharp",
+        "high_d",
+        "high_f",
+        "high_f_sharp",
+        "high_g_sharp",
+        "PAUSE"
+    ],
+    "G": [
+        "PAUSE",
+        "mid_a",
+        "mid_b",
+        "mid_c_sharp",
+        "mid_d",
+        "mid_d_sharp",
+        "mid_f_sharp",
+        "mid_g",
+        "high_a",
+        "high_b",
+        "high_c_sharp",
+        "high_d",
+        "high_d_sharp",
+        "high_f_sharp",
+        "high_g",
+        "PAUSE"
+    ],
+    "G#": [
+        "PAUSE",
+        "mid_a_sharp",
+        "mid_c",
+        "mid_d",
+        "mid_d_sharp",
+        "mid_e",
+        "mid_g",
+        "mid_g_sharp",
+        "high_a_sharp",
+        "high_c",
+        "high_d",
+        "high_d_sharp",
+        "high_e",
+        "high_g",
+        "high_g_sharp",
+        "PAUSE"
+    ]
+}
