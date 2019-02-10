@@ -25,6 +25,14 @@ def make_hash(data):
     m.update(data)
     return m.hexdigest()
 
+def make_full_scale(data):
+    return data + data[1:-1]
+
+def get_first_a(data):
+    for i in range(len(data)):
+        if data[i][0] == "A":
+            return i
+
 api_key = "0849d2b7e2fadff537a5e0e8d2eff1c8"
 
 beat_enc = {
@@ -34,14 +42,15 @@ beat_enc = {
     3 : "1"
 }
 
-notes = read_from_file("scales_and_notes.json")['D#']
+
+notes = read_from_file("major_scales.json")['D#']
 notes.insert(0, "PAUSE")
 notes.append("PAUSE")
 
 if __name__ == "__main__":
     files = read_from_file("data_to_parse.json")
 
-    for data in range(len(files['list'])):
+    for data in range(len(files['list'][:1])):
         data = json.dumps(data).encode('utf-8')
         data = make_hash(data)[:-2]
 
