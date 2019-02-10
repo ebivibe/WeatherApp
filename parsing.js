@@ -156,7 +156,7 @@ function getParams(data) {
     var min_temp_avg = min_temp_sum / data.length;
 
     var scales = "";
-    if (min_temp_avg < 263.15) {
+    if (min_temp_avg < 273.15) {
         scales = minors;
     }
     else {
