@@ -11,34 +11,43 @@ function Generate(loc, form) {
         lat = data[0].lat;
         request2 = new XMLHttpRequest();
         // Open a new connection, using the GET request on the URL endpoint
-        var x = 'http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&APPID=0849d2b7e2fadff537a5e0e8d2eff1c8';
+        var x = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&APPID=0849d2b7e2fadff537a5e0e8d2eff1c8';
         request2.open('GET', x, true);
         request2.onload = function () {
             var data2 = JSON.parse(this.response).list;
             var params = getParams(data2);
             var music = generateMusic(data2, params[0]);
-            console.log(music);
             var bpm = params[1];
             var lastdur = 0;
+            document.getElementById("music").innerHTML="";
             for (var i = 0; i < music.length; i++) {
                 dur = 0
                 if (music[i].substring(0, 1) == "0") {
                     eighth(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
                     dur = 3000/bpm*1000;
+                    document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Eighth note  </li>";
                 }
                 else if (music[i].substring(0, 1) == "1") {
                     quarter(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
                     dur = 6000/bpm*1000;
+                    document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Quarter note  </li>";
+                
                 }
                 else if (music[i].substring(0, 1) == "0") {
                     half(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
                     dur = 12000/bpm*1000;
+                    document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Half note  </li>";
+                
                 }
                 else {
                     whole(music[i].substring(1, music[i].length - 1), parseInt(music[i].substring(music[i].length - 1)), bpm, lastdur);
                     dur = 24000/bpm*1000;
+                    document.getElementById("music").innerHTML+= "<li class=\"list-group-item\">Note: "+music[i].substring(1)+" Type: Whole note  </li>";
+                
                 }
                 lastdur = dur;
+
+                
             }
 
             document.getElementById("progress").style.width = "100%";
@@ -105,18 +114,18 @@ function playNote(note, octave, bpm, time, timeout) {
 }
 
 function whole(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 240, timeout);
+    playNote(note, octave, bpm, 240*4, timeout);
 }
 
 function half(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 120, timeout);
+    playNote(note, octave, bpm, 120*4, timeout);
 }
 
 function quarter(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 60, timeout);
+    playNote(note, octave, bpm, 60*4, timeout);
 }
 function eighth(note, octave, bpm, timeout) {
-    playNote(note, octave, bpm, 30, timeout);
+    playNote(note, octave, bpm, 30*4, timeout);
 }
 
 function wait(ms) {
@@ -213,14 +222,14 @@ var minors = {
     ],
     "A#": [
         "A#3",
-        "B#3",
+        "C4",
         "C#4",
         "D#4",
         "F4",
         "F#4",
         "G#4",
         "A#4",
-        "B#4",
+        "C5",
         "C#5",
         "D#5",
         "F5",
@@ -303,14 +312,14 @@ var minors = {
     ],
     "D#": [
         "D#3",
-        "E#3",
+        "F3",
         "F#3",
         "G#3",
         "A#3",
         "B3",
         "C#4",
         "D#4",
-        "E#4",
+        "F4",
         "F#4",
         "G#4",
         "A#4",
