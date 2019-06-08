@@ -12,7 +12,7 @@ function Generate(loc, form) {
         lat = data[0].lat;
         request2 = new XMLHttpRequest();
         // Open a new connection, using the GET request on the URL endpoint
-        var x = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&APPID=0849d2b7e2fadff537a5e0e8d2eff1c8';
+        var x = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&APPID=insertApiKeyHere';
         request2.open('GET', x, true);
         request2.onload = function () {
             var data2 = JSON.parse(this.response).list;
